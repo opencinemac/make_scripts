@@ -6,7 +6,7 @@ import platform
 from configparser import ConfigParser
 
 CONFIG_PATH = pathlib.Path(__file__).parent.parent.parent / "setup.cfg"
-PLATFORM = platform.platform()
+PLATFORM = platform.system()
 
 
 def load_cfg() -> ConfigParser:
