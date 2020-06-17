@@ -1,10 +1,12 @@
 import venv
 import sys
 import pathlib
+import platform
 
 from configparser import ConfigParser
 
 CONFIG_PATH = pathlib.Path(__file__).parent.parent.parent / "setup.cfg"
+PLATFORM = platform.platform()
 
 
 def load_cfg() -> ConfigParser:
@@ -25,7 +27,7 @@ def create_venv(lib_name: str, py_version: str) -> pathlib.Path:
     :return: path to venv
     """
 
-    venv_name = f"{lib_name}-py-{py_version}"
+    venv_name = f"{lib_name}-py-{py_version}-py"
     venv_path = pathlib.Path(f"~/venvs/{venv_name}").expanduser()
 
     try:
@@ -50,10 +52,15 @@ def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -
     lib_path: pathlib.Path = (pathlib.Path(__file__).parent.parent.parent.absolute())
 
     bash_alias = f"env_{lib_name}-{py_version}"
-
     command = f'alias {bash_alias}=\'cd "{lib_path}";source "{activate_path}"\''
 
-    bash_rc_path = pathlib.Path("~/.bash_profile").expanduser()
+    if PLATFORM == "Darwin":
+        bash_rc_path = pathlib.Path("~/.bash_profile").expanduser()
+    elif PLATFORM == "Linux":
+        bash_rc_path = pathlib.Path("~/.bash_aliases").expanduser()
+    else:
+        raise RuntimeError("operating system not supported for venv creation")
+
     bash_rc_text = bash_rc_path.read_text()
 
     if command in bash_rc_text:
