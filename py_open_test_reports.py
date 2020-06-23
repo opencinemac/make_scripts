@@ -4,7 +4,7 @@ import sys
 
 PLATFORM = platform.system()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if PLATFORM == "Darwin":
         command_base = "open"
     elif PLATFORM == "Linux":
