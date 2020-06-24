@@ -16,7 +16,7 @@ if __name__ == "__main__":
             "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
         )
 
-    report1 = "./zdevelop/tests/_reports/coverage/index.html"
+    report1 = "./zdevelop/tests/_reports/coverage.html"
     report2 = "./zdevelop/tests/_reports/test_results.html"
 
     command1 = [command_base, report1]

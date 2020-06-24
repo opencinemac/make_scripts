@@ -10,8 +10,8 @@ STD_OUT_LOG = pathlib.Path("./zdevelop/tests/_reports/test_stdout.txt")
 STD_ERR_LOG = pathlib.Path("./zdevelop/tests/_reports/test_stderr.txt")
 FULL_LOG = pathlib.Path("./zdevelop/tests/_reports/test_full.txt")
 COVERAGE_LOG = pathlib.Path("./zdevelop/tests/_reports/coverage.out")
-TEST_REPORT = pathlib.Path("./zdevelop/tests/_reports/test_report.html")
-COVERAGE_REPORT = pathlib.Path("./zdevelop/tests/_reports/coverage.html")
+TEST_REPORT = pathlib.Path("./zdevelop/tests/_reports/test_results.html")
+COVERAGE_REPORT = pathlib.Path("./zdevelop/tests/_reports/coverage/index.html")
 
 COVERAGE_REGEX = re.compile(r"total:\s+\(statements\)\s+(\d+\.\d)%")
 
@@ -28,7 +28,7 @@ def load_cfg() -> ConfigParser:
 
 def run_test():
     config = load_cfg()
-    coverage_required = config.getfloat("testing", "coverage_required")
+    coverage_required = config.getfloat("testing", "coverage_required") * 100
     test_package = config.get("testing", "test_package", fallback="./...")
     exclude_string = config.get("testing", "exclude", fallback="")
     exclude_list = [e for e in exclude_string.split("\n") if e]
