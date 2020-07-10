@@ -29,14 +29,11 @@ def make_proto_html():
     ]
     command += proto_files
 
-    proc = subprocess.Popen(
-        command,
-        cwd=str(ROOT_DIR),
-    )
+    proc = subprocess.Popen(command, cwd=str(ROOT_DIR),)
 
     _, _ = proc.communicate()
     sys.exit(proc.returncode)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     make_proto_html()

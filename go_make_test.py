@@ -35,9 +35,7 @@ def run_test():
 
     # Get the list of packages we want to cover
     list_process = subprocess.Popen(
-        ["go", "list", test_package],
-        stdout=subprocess.PIPE,
-        universal_newlines=True
+        ["go", "list", test_package], stdout=subprocess.PIPE, universal_newlines=True
     )
 
     grep_command = ["grep", "-v"]
@@ -50,7 +48,7 @@ def run_test():
         stdin=list_process.stdout,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        universal_newlines=True
+        universal_newlines=True,
     )
 
     list_process.stdout.close()
@@ -75,10 +73,7 @@ def run_test():
     sys.stdout.write(f"command: {' '.join(command)}\n")
 
     proc = subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
     )
     stdout, stderr = proc.communicate()
 
@@ -102,10 +97,7 @@ def run_test():
     ]
 
     proc = subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
     )
     stdout, stderr = proc.communicate()
 
@@ -135,5 +127,5 @@ def run_test():
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_test()
