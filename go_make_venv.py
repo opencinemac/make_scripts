@@ -56,13 +56,16 @@ def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -
     command = f'alias {bash_alias}=\'cd "{lib_path}";source "{activate_path}"\''
 
     if PLATFORM == "Darwin":
-        bash_rc_path = pathlib.Path("~/.bash_profile").expanduser()
+        bash_rc_path = pathlib.Path("~/.bash_aliases").expanduser()
     elif PLATFORM == "Linux":
         bash_rc_path = pathlib.Path("~/.bash_aliases").expanduser()
     else:
         raise RuntimeError("operating system not supported for venv creation")
 
-    bash_rc_text = bash_rc_path.read_text()
+    if bash_rc_path.exists():
+        bash_rc_text = bash_rc_path.read_text()
+    else:
+        bash_rc_text = ""
 
     if command in bash_rc_text:
         return bash_alias
