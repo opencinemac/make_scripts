@@ -20,9 +20,6 @@ def find_proto_files() -> List[str]:
 
     directory = pathlib.Path(os.getcwd())
     for proto_path in directory.rglob("./astral_proto/**/*.proto"):
-        if "google" in str(proto_path):
-            continue
-
         path_str = str(proto_path)
         path_str = path_str.replace(str(directory), ".")
         proto_file_list.append(path_str)
