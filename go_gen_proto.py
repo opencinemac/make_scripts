@@ -72,5 +72,5 @@ def run_tag_command(source_code_path: pathlib.Path) -> None:
         sys.exit(proc.returncode)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
