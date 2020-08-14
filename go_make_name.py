@@ -30,6 +30,7 @@ class ScriptInfo:
 
     # flags
     new_created: bool = False
+    is_service: bool = False
 
     @staticmethod
     def config_path() -> pathlib.Path:
@@ -59,6 +60,9 @@ def load_target_name(script_info: ScriptInfo) -> None:
         script_info.name_target = sys.argv[1]
     except IndexError:
         raise ValueError("new name must be passed with name=[name] param")
+
+    if "service" in sys.argv:
+        script_info.is_service = True
 
     # throw error if target name is empty
     if not script_info.name_target:
@@ -126,11 +130,12 @@ def rewrite_sphinx_conf(target_name: str) -> None:
     conf_path.write_text(conf_text)
 
 
-def rename_packages(old_name: str, target_name: str) -> None:
+def rename_packages(old_name: str, target_name: str, is_service: bool) -> None:
     """
     renames top level directory, module package, and changes active directory to it
     :param old_name: old name of lib
     :param target_name: new name of lib
+    :param is_service: whether this lib is actually as service.
     :return:
     """
     # find current lib path - look for the init and ignore zdevelop
@@ -146,6 +151,9 @@ def rename_packages(old_name: str, target_name: str) -> None:
     )
     if process.wait(timeout=5) != 0:
         raise RuntimeError("could not init gomod")
+
+    if is_service:
+        return
 
     # iterate through
     i = 0
@@ -195,7 +203,7 @@ def alter_new(script_info: ScriptInfo) -> None:
         pass
 
     # rename directory
-    rename_packages(old_name, script_info.name_target)
+    rename_packages(old_name, script_info.name_target, script_info.is_service)
 
 
 def main():
