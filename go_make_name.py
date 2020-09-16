@@ -23,6 +23,7 @@ class ScriptInfo:
     # names
     name_target: str = None
     name_original: str = None
+    git_org: str = None
 
     # paths
     path_original: pathlib.Path = None
@@ -101,6 +102,7 @@ def edit_cfg(script_info: ScriptInfo) -> str:
     target_name = script_info.name_target
 
     config = load_cfg(script_info.config_path())
+    script_info.git_org = config.get("metadata", "git_org")
     old_name = config.get("metadata", "name")
 
     config.set("metadata", "name", target_name)
@@ -130,7 +132,9 @@ def rewrite_sphinx_conf(target_name: str) -> None:
     conf_path.write_text(conf_text)
 
 
-def rename_packages(old_name: str, target_name: str, is_service: bool) -> None:
+def rename_packages(
+    old_name: str, target_name: str, is_service: bool, git_org: str
+) -> None:
     """
     renames top level directory, module package, and changes active directory to it
     :param old_name: old name of lib
@@ -147,7 +151,7 @@ def rename_packages(old_name: str, target_name: str, is_service: bool) -> None:
 
     os.remove(str(go_mod_path))
     process = subprocess.Popen(
-        ["go", "mod", "init", f"github.com/illuscio-dev/{target_name}-go"]
+        ["go", "mod", "init", f"{git_org}/{target_name}-go"]
     )
     if process.wait(timeout=5) != 0:
         raise RuntimeError("could not init gomod")
@@ -203,7 +207,9 @@ def alter_new(script_info: ScriptInfo) -> None:
         pass
 
     # rename directory
-    rename_packages(old_name, script_info.name_target, script_info.is_service)
+    rename_packages(
+        old_name, script_info.name_target, script_info.is_service, script_info.git_org
+    )
 
 
 def main():
