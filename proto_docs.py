@@ -53,7 +53,10 @@ def make_proto_html():
     ]
     command.extend(proto_files)
 
-    proc = subprocess.Popen(command, cwd=str(ROOT_DIR),)
+    proc = subprocess.Popen(
+        command,
+        cwd=str(ROOT_DIR),
+    )
 
     _, _ = proc.communicate()
     sys.exit(proc.returncode)

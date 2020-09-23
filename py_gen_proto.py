@@ -89,19 +89,23 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
 def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options):
     file_text = python_file.read_text()
     file_text = file_text.replace(
-        f"from {options.original_import}", f"from {options.new_import}",
+        f"from {options.original_import}",
+        f"from {options.new_import}",
     )
     file_text = file_text.replace(
-        f"import {options.original_import}", f"import {options.new_import}",
+        f"import {options.original_import}",
+        f"import {options.new_import}",
     )
 
     if not pyi:
         file_text = file_text.replace(
-            f"[{options.original_import}", f"[{options.new_import}",
+            f"[{options.original_import}",
+            f"[{options.new_import}",
         )
 
     file_text = file_text.replace(
-        f" {options.original_import}.", f" {options.new_import}.",
+        f" {options.original_import}.",
+        f" {options.new_import}.",
     )
     python_file.write_text(file_text)
 

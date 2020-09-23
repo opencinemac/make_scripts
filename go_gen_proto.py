@@ -30,7 +30,7 @@ def load_cfg() -> Options:
 
     options = Options(
         proto_root_dir=pathlib.Path(config["proto"]["root_source_path"]),
-        go_module_root=pathlib.Path(config["proto"]["root_go_package"])
+        go_module_root=pathlib.Path(config["proto"]["root_go_package"]),
     )
 
     return options
