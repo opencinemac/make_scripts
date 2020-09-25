@@ -54,7 +54,6 @@ def find_proto_files(options: Options) -> List[str]:
     proto_file_list: List[str] = list()
 
     for proto_path in options.proto_root_dir.rglob("./**/*.proto"):
-        print(proto_path)
         if "google" in str(proto_path):
             continue
 

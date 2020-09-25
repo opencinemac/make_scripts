@@ -1,5 +1,6 @@
 import pathlib
 import sys
+import os
 import subprocess
 import dataclasses
 import configparser
@@ -48,7 +49,7 @@ def main():
 
 def generate_python_source(options: Options):
     proto_files = find_proto_files(options)
-    run_protoc_command(proto_files)
+    run_protoc_command(proto_files, options)
     fix_generated_files(options)
 
 
@@ -56,15 +57,18 @@ def find_proto_files(options: Options) -> List[str]:
     proto_file_list: List[str] = list()
 
     for proto_path in options.proto_root_dir.rglob("./**/*.proto"):
+        if "google" in str(proto_path):
+            continue
+
         path_str = str(proto_path)
-        path_str = path_str.replace(str(options.proto_root_dir), ".")
+        path_str = path_str.replace(str(os.getcwd()), ".")
         proto_file_list.append(path_str)
 
     return proto_file_list
 
 
-def run_protoc_command(proto_files: List[str]) -> None:
-    command = build_protoc_command(proto_files)
+def run_protoc_command(proto_files: List[str], options: Options) -> None:
+    command = build_protoc_command(proto_files, options)
 
     proc = subprocess.Popen(command)
     _, _ = proc.communicate()
