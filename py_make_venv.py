@@ -49,7 +49,7 @@ def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -
     :return: bash alias to enter venv
     """
 
-    lib_path: pathlib.Path = (pathlib.Path(__file__).parent.parent.parent.absolute())
+    lib_path: pathlib.Path = pathlib.Path(__file__).parent.parent.parent.absolute()
 
     bash_alias = f"env_{lib_name}-{py_version}"
     command = f'alias {bash_alias}=\'cd "{lib_path}";source "{activate_path}"\''

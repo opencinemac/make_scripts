@@ -1,5 +1,6 @@
 import pathlib
 import sys
+import os
 import subprocess
 import dataclasses
 import configparser
@@ -48,7 +49,7 @@ def main():
 
 def generate_python_source(options: Options):
     proto_files = find_proto_files(options)
-    run_protoc_command(proto_files)
+    run_protoc_command(proto_files, options)
     fix_generated_files(options)
 
 
@@ -56,15 +57,18 @@ def find_proto_files(options: Options) -> List[str]:
     proto_file_list: List[str] = list()
 
     for proto_path in options.proto_root_dir.rglob("./**/*.proto"):
+        if "google" in str(proto_path):
+            continue
+
         path_str = str(proto_path)
-        path_str = path_str.replace(str(options.proto_root_dir), ".")
+        path_str = path_str.replace(str(os.getcwd()), ".")
         proto_file_list.append(path_str)
 
     return proto_file_list
 
 
-def run_protoc_command(proto_files: List[str]) -> None:
-    command = build_protoc_command(proto_files)
+def run_protoc_command(proto_files: List[str], options: Options) -> None:
+    command = build_protoc_command(proto_files, options)
 
     proc = subprocess.Popen(command)
     _, _ = proc.communicate()
@@ -90,19 +94,23 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
 def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options):
     file_text = python_file.read_text()
     file_text = file_text.replace(
-        f"from {options.original_import}", f"from {options.new_import}",
+        f"from {options.original_import}",
+        f"from {options.new_import}",
     )
     file_text = file_text.replace(
-        f"import {options.original_import}", f"import {options.new_import}",
+        f"import {options.original_import}",
+        f"import {options.new_import}",
     )
 
     if not pyi:
         file_text = file_text.replace(
-            f"[{options.original_import}", f"[{options.new_import}",
+            f"[{options.original_import}",
+            f"[{options.new_import}",
         )
 
     file_text = file_text.replace(
-        f" {options.original_import}.", f" {options.new_import}.",
+        f" {options.original_import}.",
+        f" {options.new_import}.",
     )
     python_file.write_text(file_text)
 

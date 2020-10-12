@@ -150,9 +150,7 @@ def rename_packages(
     package_regex = re.compile(r"(package) \S+", flags=re.IGNORECASE)
 
     os.remove(str(go_mod_path))
-    process = subprocess.Popen(
-        ["go", "mod", "init", f"{git_org}/{target_name}-go"]
-    )
+    process = subprocess.Popen(["go", "mod", "init", f"{git_org}/{target_name}-go"])
     if process.wait(timeout=5) != 0:
         raise RuntimeError("could not init gomod")
 

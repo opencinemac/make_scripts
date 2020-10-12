@@ -30,7 +30,7 @@ def load_cfg() -> Options:
 
     options = Options(
         proto_root_dir=pathlib.Path(config["proto"]["root_source_path"]),
-        go_module_root=pathlib.Path(config["proto"]["root_go_package"])
+        go_module_root=pathlib.Path(config["proto"]["root_go_package"]),
     )
 
     return options
@@ -54,7 +54,6 @@ def find_proto_files(options: Options) -> List[str]:
     proto_file_list: List[str] = list()
 
     for proto_path in options.proto_root_dir.rglob("./**/*.proto"):
-        print(proto_path)
         if "google" in str(proto_path):
             continue
 
