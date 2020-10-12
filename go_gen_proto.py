@@ -80,6 +80,7 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
 
     command = [
         "protoc",
+        "--experimental_allow_proto3_optional",
         "--go_out=plugins=grpc:.",
         f"--go_opt=module={options.go_module_root}",
     ]

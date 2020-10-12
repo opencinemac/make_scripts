@@ -78,6 +78,7 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
         "-m",
         "grpc_tools.protoc",
         "-I.",
+        "--experimental_allow_proto3_optional",
         f"--python_out={options.output_dir}",
         f"--python_grpc_out={options.output_dir}",
         f"--mypy_out={options.output_dir}",
