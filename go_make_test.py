@@ -64,6 +64,7 @@ def run_test():
         "test",
         "-v",
         "-failfast",
+        "-timeout=60s",
         "-covermode=count",
         f"-coverprofile={COVERAGE_LOG}",
         f"-coverpkg={','.join(packages)}",
