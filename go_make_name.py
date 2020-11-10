@@ -23,6 +23,7 @@ class ScriptInfo:
     # names
     name_target: str = None
     name_original: str = None
+    git_org: str = None
 
     # paths
     path_original: pathlib.Path = None
@@ -30,6 +31,7 @@ class ScriptInfo:
 
     # flags
     new_created: bool = False
+    is_service: bool = False
 
     @staticmethod
     def config_path() -> pathlib.Path:
@@ -59,6 +61,9 @@ def load_target_name(script_info: ScriptInfo) -> None:
         script_info.name_target = sys.argv[1]
     except IndexError:
         raise ValueError("new name must be passed with name=[name] param")
+
+    if "service" in sys.argv:
+        script_info.is_service = True
 
     # throw error if target name is empty
     if not script_info.name_target:
@@ -97,6 +102,7 @@ def edit_cfg(script_info: ScriptInfo) -> str:
     target_name = script_info.name_target
 
     config = load_cfg(script_info.config_path())
+    script_info.git_org = config.get("metadata", "git_org")
     old_name = config.get("metadata", "name")
 
     config.set("metadata", "name", target_name)
@@ -126,11 +132,14 @@ def rewrite_sphinx_conf(target_name: str) -> None:
     conf_path.write_text(conf_text)
 
 
-def rename_packages(old_name: str, target_name: str) -> None:
+def rename_packages(
+    old_name: str, target_name: str, is_service: bool, git_org: str
+) -> None:
     """
     renames top level directory, module package, and changes active directory to it
     :param old_name: old name of lib
     :param target_name: new name of lib
+    :param is_service: whether this lib is actually as service.
     :return:
     """
     # find current lib path - look for the init and ignore zdevelop
@@ -141,11 +150,12 @@ def rename_packages(old_name: str, target_name: str) -> None:
     package_regex = re.compile(r"(package) \S+", flags=re.IGNORECASE)
 
     os.remove(str(go_mod_path))
-    process = subprocess.Popen(
-        ["go", "mod", "init", f"github.com/illuscio-dev/{target_name}-go"]
-    )
+    process = subprocess.Popen(["go", "mod", "init", f"{git_org}/{target_name}-go"])
     if process.wait(timeout=5) != 0:
         raise RuntimeError("could not init gomod")
+
+    if is_service:
+        return
 
     # iterate through
     i = 0
@@ -195,7 +205,9 @@ def alter_new(script_info: ScriptInfo) -> None:
         pass
 
     # rename directory
-    rename_packages(old_name, script_info.name_target)
+    rename_packages(
+        old_name, script_info.name_target, script_info.is_service, script_info.git_org
+    )
 
 
 def main():

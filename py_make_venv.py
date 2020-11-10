@@ -49,19 +49,22 @@ def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -
     :return: bash alias to enter venv
     """
 
-    lib_path: pathlib.Path = (pathlib.Path(__file__).parent.parent.parent.absolute())
+    lib_path: pathlib.Path = pathlib.Path(__file__).parent.parent.parent.absolute()
 
     bash_alias = f"env_{lib_name}-{py_version}"
     command = f'alias {bash_alias}=\'cd "{lib_path}";source "{activate_path}"\''
 
     if PLATFORM == "Darwin":
-        bash_rc_path = pathlib.Path("~/.bash_profile").expanduser()
+        bash_rc_path = pathlib.Path("~/.bash_aliases").expanduser()
     elif PLATFORM == "Linux":
         bash_rc_path = pathlib.Path("~/.bash_aliases").expanduser()
     else:
         raise RuntimeError("operating system not supported for venv creation")
 
-    bash_rc_text = bash_rc_path.read_text()
+    if bash_rc_path.exists():
+        bash_rc_text = bash_rc_path.read_text()
+    else:
+        bash_rc_text = ""
 
     if command in bash_rc_text:
         return bash_alias
