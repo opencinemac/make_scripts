@@ -69,7 +69,7 @@ def run_test():
         f"-coverprofile={COVERAGE_LOG}",
         f"-coverpkg={','.join(packages)}",
     ]
-    command = command + packages
+    command = command + ["./..."]
 
     sys.stdout.write(f"command: {' '.join(command)}\n")
 
