@@ -32,6 +32,7 @@ def run_test():
     test_package = config.get("testing", "test_package", fallback="./...")
     exclude_string = config.get("testing", "exclude", fallback="")
     exclude_list = [e for e in exclude_string.split("\n") if e]
+    race_detection = config.getboolean("testing", "race_detection", fallback=True)
 
     # Get the list of packages we want to cover
     list_process = subprocess.Popen(
@@ -59,16 +60,28 @@ def run_test():
 
     sys.stdout.write(f"COVERAGE REQUIRED: {coverage_required}\n")
 
+    # Set up the command
     command = [
         "go",
         "test",
         "-v",
         "-failfast",
         "-timeout=60s",
-        "-covermode=count",
-        f"-coverprofile={COVERAGE_LOG}",
-        f"-coverpkg={','.join(packages)}",
     ]
+
+    # Add the race flag if we are using it.
+    if race_detection:
+        command.append("-race")
+
+    # Finish building the command.
+    command.extend(
+        [
+            "-covermode=atomic",
+            f"-coverprofile={COVERAGE_LOG}",
+            f"-coverpkg={','.join(packages)}",
+        ]
+    )
+
     command = command + ["./..."]
 
     sys.stdout.write(f"command: {' '.join(command)}\n")
