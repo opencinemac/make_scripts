@@ -34,6 +34,7 @@ def run_test():
     exclude_list = [e for e in exclude_string.split("\n") if e]
     race_detection = config.getboolean("testing", "race_detection", fallback=True)
     multi_process = config.getboolean("testing", "multi_process", fallback=True)
+    timeout = config.getint("testing", "timeout", fallback=60)
 
     # Get the list of packages we want to cover
     list_process = subprocess.Popen(
@@ -67,7 +68,7 @@ def run_test():
         "test",
         "-v",
         "-failfast",
-        "-timeout=60s",
+        f"-timeout={timeout}s",
     ]
 
     # Add the race flag if we are using it.
