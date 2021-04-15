@@ -33,6 +33,7 @@ def run_test():
     exclude_string = config.get("testing", "exclude", fallback="")
     exclude_list = [e for e in exclude_string.split("\n") if e]
     race_detection = config.getboolean("testing", "race_detection", fallback=True)
+    multi_process = config.getboolean("testing", "multi_process", fallback=True)
 
     # Get the list of packages we want to cover
     list_process = subprocess.Popen(
@@ -72,6 +73,10 @@ def run_test():
     # Add the race flag if we are using it.
     if race_detection:
         command.append("-race")
+
+    # Add th flag to restrict the number of simultaneous tests to 1.
+    if not multi_process:
+        command.extend(("-p", "1"))
 
     # Finish building the command.
     command.extend(
