@@ -42,7 +42,7 @@ def create_venv(lib_name: str, py_version: str) -> pathlib.Path:
 
 def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -> str:
     """
-    registers the new enviroment with a .bashrc entry alias for easy venv entry
+    registers the new environment with a .bashrc entry alias for easy venv entry
     :param activate_path: path to virtual env activation script
     :param py_version: string representation of two-digit python version (ie 37)
     :param lib_name: name of library
@@ -83,7 +83,7 @@ def register_venv(activate_path: pathlib.Path, lib_name: str, py_version: str) -
 
 
 def main() -> None:
-    """makes virtual enviroment for development and adds alias to ~/.bashrc"""
+    """makes virtual environment for development and adds alias to ~/.bashrc"""
 
     py_version = f"{sys.version_info[0]}{sys.version_info[1]}"
 
@@ -99,5 +99,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    """creates virtual enviroment and writes path to stdout"""
+    """creates virtual environment and writes path to stdout"""
     main()
