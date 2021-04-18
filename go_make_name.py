@@ -140,6 +140,7 @@ def rename_packages(
     :param old_name: old name of lib
     :param target_name: new name of lib
     :param is_service: whether this lib is actually as service.
+    :param git_org: the git organization name.
     :return:
     """
     # find current lib path - look for the init and ignore zdevelop
