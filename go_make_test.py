@@ -26,7 +26,7 @@ def load_cfg() -> ConfigParser:
     return config
 
 
-def run_test():
+def run_test() -> None:
     config = load_cfg()
     coverage_required = config.getfloat("testing", "coverage_required") * 100
     test_package = config.get("testing", "test_package", fallback="./...")
@@ -54,6 +54,7 @@ def run_test():
         universal_newlines=True,
     )
 
+    assert list_process.stdout is not None
     list_process.stdout.close()
     packages_str, _ = grep_process.communicate()
     packages = packages_str.split("\n")
@@ -113,7 +114,7 @@ def run_test():
         "tool",
         "cover",
         "--func",
-        COVERAGE_LOG,
+        str(COVERAGE_LOG),
     ]
 
     proc = subprocess.Popen(

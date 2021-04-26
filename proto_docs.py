@@ -39,7 +39,7 @@ def expand_directories(config_paths: List[str]) -> List[str]:
     return proto_paths
 
 
-def make_proto_html():
+def make_proto_html() -> None:
     config = load_cfg()
     proto_files_string = config.get("docs.proto", "paths")
     config_paths = [f for f in proto_files_string.split("\n") if f]

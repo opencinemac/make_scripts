@@ -7,6 +7,7 @@ from itertools import count
 from glob import iglob
 from dataclasses import dataclass
 from configparser import ConfigParser
+from typing import Optional
 
 """
 changes name of module in file path file path directory and all relevant config settings
@@ -20,12 +21,12 @@ class ScriptInfo:
     """
 
     # names
-    name_target: str = None
-    name_original: str = None
+    name_target: Optional[str] = None
+    name_original: Optional[str] = None
 
     # paths
-    path_original: pathlib.Path = None
-    path_target: pathlib.Path = None
+    path_original: Optional[pathlib.Path] = None
+    path_target: Optional[pathlib.Path] = None
 
     # flags
     new_created: bool = False
@@ -179,6 +180,7 @@ def alter_new(script_info: ScriptInfo) -> None:
     old_name = edit_cfg(script_info)
 
     # write new conf.py
+    assert script_info.name_target is not None
     rewrite_sphinx_conf(script_info.name_target)
 
     # remove .egg info
@@ -195,7 +197,7 @@ def alter_new(script_info: ScriptInfo) -> None:
     rename_packages(old_name, script_info.name_target)
 
 
-def main():
+def main() -> None:
     """makes new directory and handles errors"""
 
     script_info = ScriptInfo()

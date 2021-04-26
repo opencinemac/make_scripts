@@ -42,12 +42,12 @@ def load_cfg() -> Options:
     return options
 
 
-def main():
+def main() -> None:
     options = load_cfg()
     generate_python_source(options)
 
 
-def generate_python_source(options: Options):
+def generate_python_source(options: Options) -> None:
     proto_files = find_proto_files(options)
     run_protoc_command(proto_files, options)
     fix_generated_files(options)
@@ -91,7 +91,7 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
     return command
 
 
-def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options):
+def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options) -> None:
     file_text = python_file.read_text()
     file_text = file_text.replace(
         f"from {options.original_import}",
@@ -115,7 +115,7 @@ def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options):
     python_file.write_text(file_text)
 
 
-def fix_generated_files(options: Options):
+def fix_generated_files(options: Options) -> None:
     for python_file in pathlib.Path(options.output_dir).rglob("./**/*.py"):
         fix_import_paths(python_file, pyi=False, options=options)
 

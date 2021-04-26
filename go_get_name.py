@@ -13,7 +13,7 @@ def load_cfg(config_path: pathlib.Path) -> configparser.ConfigParser:
     return config
 
 
-def main():
+def main() -> None:
     config = load_cfg(pathlib.Path("./setup.cfg").absolute())
     service_name = config.get("metadata", "name")
 

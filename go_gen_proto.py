@@ -16,7 +16,7 @@ class Options:
 
     proto_root_dir: pathlib.Path
     """Root path to our protobuf folder."""
-    go_module_root: str
+    go_module_root: pathlib.Path
     """Root module to use for protoc-gen-go '--go_opt=module=' flag."""
 
 
@@ -36,14 +36,14 @@ def load_cfg() -> Options:
     return options
 
 
-def main():
+def main() -> None:
     """Run the script."""
     options = load_cfg()
     generate_golang_source(options)
     add_bson_tags()
 
 
-def generate_golang_source(options: Options):
+def generate_golang_source(options: Options) -> None:
     """Generate the protocol buffers."""
     proto_files = find_proto_files(options)
     run_protoc_command(proto_files, options)
@@ -87,7 +87,7 @@ def build_protoc_command(protoc_files: List[str], options: Options) -> List[str]
     return command
 
 
-def add_bson_tags():
+def add_bson_tags() -> None:
     """Add bson tags through protoc-go-inject-tag."""
     directory = pathlib.Path(os.getcwd())
     for source_code_file_path in directory.rglob("./**/*.pb.go"):
