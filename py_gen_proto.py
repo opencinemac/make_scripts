@@ -102,11 +102,10 @@ def fix_import_paths(python_file: pathlib.Path, pyi: bool, options: Options) -> 
         f"import {options.new_import}",
     )
 
-    if not pyi:
-        file_text = file_text.replace(
-            f"[{options.original_import}",
-            f"[{options.new_import}",
-        )
+    file_text = file_text.replace(
+        f"[{options.original_import}",
+        f"[{options.new_import}",
+    )
 
     file_text = file_text.replace(
         f" {options.original_import}.",
